@@ -1,0 +1,207 @@
+===========slick js
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+ $('.rtl-slider').slick({
+        
+	  slidesToShow: 1,
+	  slidesToScroll: 1,
+	  arrows: false,
+	  fade: true,
+	  asNavFor: '.rtl-slider-nav'
+	});
+    $('.rtl-slider-nav').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+       infinite: false,
+        vertical: true,
+        asNavFor: '.rtl-slider',
+        centerMode: false,
+        focusOnSelect: true,
+        prevArrow: ".thumb-prev",
+        nextArrow: ".thumb-next",
+    });
+
+
+=========
+end here
+=========
+
+
+-----------------------
+html
+---------------------
+
+<div class="grid__item product__media-wrapper cs-desktop-slider">
+          <div class="rtl-slider-flex">
+          <div class="rtl-slider">
+          {% for image in product.images %}
+          <div class="rtl-slider-slide" style="background-image: url('{{ image.src | img_url: 'large' }}');">
+          </div>
+          {% endfor %}
+          </div>
+          
+          <div class="rtl-slider-nav">
+          {% for image in product.images %}
+          <div class="rtl-slider-slide" style="background-image: url('{{ image.src | img_url: 'large' }}');">
+          </div>
+          {% endfor %}
+          </div>
+          
+          <span class="thumb-prev"><i class="fa fa-angle-up fa-lg"></i></span>
+          <span class="thumb-next"><i class="fa fa-angle-down fa-lg"></i></span>
+          </div>
+      </div>
+      <div class="grid__item product__media-wrapper cs-mobile-slider" style="display:none;">
+          {% render 'product-media-gallery', variant_images: variant_images %}
+      </div>
+
+-------------------------------------
+end here
+-----------------------------------
+
+----------------------
+csss
+--------------------
+.rtl-slider-flex {
+    width: 100% !important;
+    height: fit-content;
+    margin: 0 !important;
+    flex-direction: row-reverse !important;
+    gap: 20px;
+    box-shadow: none !important;
+    padding: 0 !important;
+    display: flex;
+    position: relative;
+}
+
+.rtl-slider-flex .rtl-slider {
+    width: calc(100% - 135px) !important;
+    margin-right: 0 !important;
+    height: 650px;
+}
+
+.rtl-slider-flex .rtl-slider-nav {
+    width: 115px !important;
+}
+
+.rtl-slider-flex .rtl-slider-nav {
+    width: 19%;
+}
+
+.rtl-slider-flex .slick-vertical .slick-slide {
+    margin-bottom: 14px;
+    transition: border .2s linear;
+}
+
+.rtl-slider-flex .rtl-slider-nav .rtl-slider-slide {
+    padding-top: 90%;
+    margin-bottom: 20px;
+    opacity: 1;
+    transition: all .3s ease;
+    cursor: pointer;
+    background-size: contain;
+}
+
+.rtl-slider-flex .rtl-slider-nav .slick-slide.slick-current.slick-active .rtl-slider-slide {
+    opacity: 1;
+}
+
+.rtl-slider-flex .rtl-slider .slick-list.draggable .slick-track .slick-slide>div .rtl-slider-slide {
+    background-size: calc(100% - 10px);
+    height: 100%;
+    background-color: #fff;
+    padding: 0 !important;
+}
+
+.rtl-slider-flex .rtl-slider .slick-list.draggable .slick-track .slick-slide>div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rtl-slider-flex .rtl-slider .slick-list.draggable,
+.rtl-slider-flex .rtl-slider .slick-list.draggable .slick-track {
+    height: 100%;
+}
+
+.rtl-slider .rtl-slider-slide.slick-slide {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.rtl-slider-flex .thumb-prev,
+.rtl-slider-flex .thumb-next {
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+    height: 88px;
+    width: 9.5%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all .3s ease;
+    background: transparent;
+}
+
+span.thumb-prev.slick-arrow,
+span.thumb-next.slick-arrow {
+    background: url(https://cdn.shopify.com/s/files/1/0724/0227/2485/files/right-arrow.svg?v=1736405020);
+    background-repeat: no-repeat;
+    background-size: 15px;
+    height: 30px;
+    width: 30px;
+    top: -13px;
+    left: 43px;
+    background-color: #fff;
+    background-position: center;
+    border: 1px solid #E7E7E7;
+    border-radius: 50%;
+    transform: rotate(-90deg);
+}
+
+span.thumb-next.slick-arrow {
+    top: auto;
+    transform: rotate(90deg);
+    bottom: 27px;
+}
+-----------------------
+css end here
+-----------------
+
+
+
+--------------------------------
+swtachjs code here
+----------------------
+
+
+ var width = $("body").width();
+    if (width > 1024) {
+ $(document).on("click", ".custom_color", function () {
+    var variant_img = $(this).attr('var_image'); // Get the image URL from the attribute
+    $(".rtl-slider-nav .slick-slide").each(function () {
+      var img_url = $(this).css('background-image');
+    // Extract URL from the background-image using regex
+        var matches = img_url.match(/url\(["']?(https?:\/\/.*)["']?\)/i);
+        var backgroundImageUrl = matches && matches[1] ? matches[1] : null;
+
+        if (backgroundImageUrl) {
+            // Remove "https:" and any trailing quotes
+            backgroundImageUrl = backgroundImageUrl.replace(/^https:/, '').replace(/["']$/, '');
+        }
+     if (backgroundImageUrl && backgroundImageUrl === variant_img) {
+            $(this).click(); // Click the matching element
+            return false; // Exit the loop after clicking
+        }
+    });
+});
+}
+
+
+----------------
+js end here
+---------------------------
